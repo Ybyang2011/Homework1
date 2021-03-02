@@ -1,4 +1,4 @@
-from helper_functions import * # this statement imports all functions from your helper_functions file!
+from helper_functions import *   # this statement imports all functions from your helper_functions file!
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -32,16 +32,13 @@ app.layout = html.Div([
         style={'display': 'inline-block'},
     ),
     # Submit button:
-    html.Button('Submit', id='submit-button', n_clicks=0)
-    ,
+    html.Button('Submit', id='submit-button', n_clicks=0),
     # Line break
     html.Br(),
     # Div to hold the initial instructions and the updated info once submit is pressed
-    html.Div(id='output_div', childern='Enter a currency code and press submit')
-    ,
+    html.Div(id='output_div', childern='Enter a currency code and press submit'),
     html.Div([
         # Candlestick graph goes here:
-
         dcc.Graph(id='candlestick-graph')
     ]),
     # Another line break
@@ -49,8 +46,7 @@ app.layout = html.Div([
     # Section title
     html.H1("Section 2: Make a Trade"),
     # Div to confirm what trade was made
-    html.Div(id='output_div_for_trade')
-    ,
+    html.Div(id='output_div_for_trade'),
     # Radio items to select buy or sell
     dcc.RadioItems(
         id='radio',
@@ -59,21 +55,19 @@ app.layout = html.Div([
             {'label': 'SELL', 'value': 'SELL'}
         ],
         value='BUY'
-    )
-    ,
+    ),
     # Text input for the currency pair to be traded
     html.Div(dcc.Input(id='currency-pair-to-be-traded', type='text', value='EURUSD', style={'display': 'inline-block'}))
     ,
     # Numeric input for the trade amount
-    dcc.Input(id='trade-amount', type='number', value=0)
-    ,
+    dcc.Input(id='trade-amount', type='number', value=0),
     # Submit button for the trade
     html.Button('Trade', id='submit-button-trade', n_clicks=0)
 ])
 
 # Callback for what to do when submit-button is pressed
 @app.callback(
-    [ # there's more than one output here, so you have to use square brackets to pass it in as an array.
+    [# there's more than one output here, so you have to use square brackets to pass it in as an array.
      Output('output_div', 'children'),
      Output('candlestick-graph', 'figure')
     ],
@@ -88,8 +82,12 @@ def update_candlestick_graph(n_clicks, value):   # n_clicks doesn't get used, we
         f.write(value)
 
     # Wait until ibkr_app runs the query and saves the historical prices csv
-    sleep(15)
-
+    while True:
+        if 'currency_pair_history' in listdir():
+            sleep(1)
+            break
+        else:
+            continue
     # Read in the historical prices
     read_history_csv = pd.read_csv('currency_pair_history.csv')
     # Remove the file 'currency_pair_history.csv'
@@ -125,7 +123,7 @@ def update_candlestick_graph(n_clicks, value):   # n_clicks doesn't get used, we
 def trade(n_clicks, action, trade_currency, trade_amt): # Still don't use n_clicks, but we need the dependency
 
     # Make the message that we want to send back to trade-output
-    msg = str(action)+' ' + str(trade_currency) + ' '+ str(trade_amt)
+    msg = str(action)+' ' + str(trade_currency) + ' ' + str(trade_amt)
     # Make our trade_order object -- a DICTIONARY.
     trade_order = dict()
     trade_order['action'] = action
@@ -141,4 +139,4 @@ def trade(n_clicks, action, trade_currency, trade_amt): # Still don't use n_clic
 # Run it!
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+   app.run_server(debug=True)
