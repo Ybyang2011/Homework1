@@ -10,7 +10,10 @@ import pickle
 from time import sleep
 
 # Run your helper function to clear out any io files left over from old runs
-# 1:
+check_for_and_del_io_files('currency_pair.txt')
+check_for_and_del_io_files('currency_pair_history.csv')
+check_for_and_del_io_files('trade_order.p')
+
 
 # Make a Dash app
 app = dash.Dash(__name__)
