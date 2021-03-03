@@ -1,4 +1,4 @@
-from helper_functions import *   # this statement imports all functions from your helper_functions file!
+from helper_functions_copy import *   # this statement imports all functions from your helper_functions file!
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -11,9 +11,6 @@ from time import sleep
 
 # Run your helper function to clear out any io files left over from old runs
 # 1:
-check_for_and_del_io_files('currency_pair.txt')
-check_for_and_del_io_files('currency_pair_history.csv')
-check_for_and_del_io_files('trade_order.p')
 
 # Make a Dash app
 app = dash.Dash(__name__)
@@ -36,7 +33,7 @@ app.layout = html.Div([
     # Line break
     html.Br(),
     # Div to hold the initial instructions and the updated info once submit is pressed
-    html.Div(id='output_div', childern='Enter a currency code and press submit'),
+    html.Div(id='output_div', children='Enter a currency code and press submit'),
     html.Div([
         # Candlestick graph goes here:
         dcc.Graph(id='candlestick-graph')
@@ -57,20 +54,20 @@ app.layout = html.Div([
         value='BUY'
     ),
     # Text input for the currency pair to be traded
-    html.Div(dcc.Input(id='currency-pair-to-be-traded', type='text', value='EURUSD', style={'display': 'inline-block'}))
+    html.Div(dcc.Input(id='currency-pair-to-be-traded', type='text', style={'display': 'inline-block'}))
     ,
     # Numeric input for the trade amount
-    dcc.Input(id='trade-amount', type='number', value=0),
+    dcc.Input(id='trade-amount', type='number'),
     # Submit button for the trade
-    html.Button('Trade', id='submit-button-trade', n_clicks=0)
+    html.Button('Trade', id='submit-button-trade')
 ])
 
 # Callback for what to do when submit-button is pressed
+
+
 @app.callback(
-    [# there's more than one output here, so you have to use square brackets to pass it in as an array.
-     Output('output_div', 'children'),
-     Output('candlestick-graph', 'figure')
-    ],
+    [Output('output_div', 'children'),
+     Output('candlestick-graph', 'figure')],
     [Input('submit-button', 'n_clicks')]
     ,
     [State('currency-pair', 'value')]
@@ -111,6 +108,8 @@ def update_candlestick_graph(n_clicks, value):   # n_clicks doesn't get used, we
     return ('Submitted query for ' + value), fig
 
 # Callback for what to do when trade-button is pressed
+
+
 @app.callback(
     [Output('output_div_for_trade', 'children')],
     [Input('submit-button-trade', 'n_clicks')],
@@ -139,4 +138,4 @@ def trade(n_clicks, action, trade_currency, trade_amt): # Still don't use n_clic
 # Run it!
 
 if __name__ == '__main__':
-   app.run_server(debug=True)
+    app.run_server(debug=True)
