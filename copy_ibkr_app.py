@@ -2,7 +2,7 @@ from ib_insync import *
 from os import listdir, remove
 from time import sleep
 import pickle
-from helper_functions import *
+from helper_functions_copy import *
 
 # Define your variables here ###########################################################################################
 sampling_rate = 1
@@ -19,9 +19,7 @@ acc_number = 'DU3523949'
 ########################################################################################################################
 
 # Run your helper function to clear out any io files left over from old runs
-check_for_and_del_io_files('currency_pair.txt')
-check_for_and_del_io_files('currency_pair_history.csv')
-check_for_and_del_io_files('trade_order.p')
+
 
 # Create an IB app; i.e., an instance of the IB() class from the ib_insync package
 ib = IB()
@@ -86,15 +84,15 @@ while True:
         #   be filled immediately.
         # In this while loop, we wait for confirmation that new_order filled.
         while not new_order.orderStatus.status == 'Filled':
-            ib_orders.sleep(0) # we use ib_orders.sleep(0) from the ib_insync module because the async socket connection
-                               # is not built for the normal time.sleep() function.
+            ib_orders.sleep(0)
+            # we use ib_orders.sleep(0) from the ib_insync module because the async socket connection
+            # is not built for the normal time.sleep() function.
 
         # your code goes here
             os.remove('trade_order.p')
         # pass: same reason as above.
             ib_orders.disconnect()
         pass
-
     # sleep, for the while loop.
     ib.sleep(sampling_rate)
 
